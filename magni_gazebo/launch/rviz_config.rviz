@@ -25,7 +25,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: ""
+    SyncSource: LaserScan
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
@@ -115,13 +115,51 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: true
+        base_footprint:
+          Value: true
+        base_link:
+          Value: true
+        laser:
+          Value: true
+        left_caster_wheel:
+          Value: true
+        left_wheel:
+          Value: true
+        map:
+          Value: true
+        odom:
+          Value: true
+        raspicam:
+          Value: true
+        raspicam_sensor:
+          Value: true
+        right_caster_wheel:
+          Value: true
+        right_wheel:
+          Value: true
       Marker Scale: 0.30000001192092896
       Name: TF
       Show Arrows: false
       Show Axes: true
       Show Names: false
       Tree:
-        {}
+        map:
+          odom:
+            base_footprint:
+              base_link:
+                laser:
+                  {}
+                left_caster_wheel:
+                  {}
+                left_wheel:
+                  {}
+                raspicam:
+                  raspicam_sensor:
+                    {}
+                right_caster_wheel:
+                  {}
+                right_wheel:
+                  {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -189,7 +227,7 @@ Visualization Manager:
       Marker Topic: /explore/frontiers
       Name: MarkerArray
       Namespaces:
-        {}
+        frontiers: true
       Queue Size: 100
       Value: true
     - Alpha: 1
@@ -202,7 +240,7 @@ Visualization Manager:
       Length: 0.30000001192092896
       Line Style: Lines
       Line Width: 0.029999999329447746
-      Name: Path
+      Name: GlobalPlan
       Offset:
         X: 0
         Y: 0
@@ -225,7 +263,7 @@ Visualization Manager:
       Length: 0.30000001192092896
       Line Style: Lines
       Line Width: 0.029999999329447746
-      Name: Path
+      Name: LocalPlan
       Offset:
         X: 0
         Y: 0
@@ -236,29 +274,6 @@ Visualization Manager:
       Shaft Diameter: 0.10000000149011612
       Shaft Length: 0.10000000149011612
       Topic: /move_base/TrajectoryPlannerROS/local_plan
-      Unreliable: false
-      Value: true
-    - Alpha: 1
-      Buffer Length: 1
-      Class: rviz/Path
-      Color: 173; 127; 168
-      Enabled: true
-      Head Diameter: 0.30000001192092896
-      Head Length: 0.20000000298023224
-      Length: 0.30000001192092896
-      Line Style: Lines
-      Line Width: 0.029999999329447746
-      Name: Path
-      Offset:
-        X: 0
-        Y: 0
-        Z: 0
-      Pose Color: 255; 85; 255
-      Pose Style: None
-      Radius: 0.029999999329447746
-      Shaft Diameter: 0.10000000149011612
-      Shaft Length: 0.10000000149011612
-      Topic: /move_base/TrajectoryPlannerROS/global_plan
       Unreliable: false
       Value: true
   Enabled: true
@@ -289,7 +304,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 22.50869369506836
+      Distance: 23.660192489624023
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
