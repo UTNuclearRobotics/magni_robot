@@ -1,3 +1,29 @@
+TrajectoryPlannerROS:
+  acc_lim_x: 1.0
+  acc_lim_y: 1.0  
+  acc_lim_theta: 0.6
+  max_vel_x: 0.35
+  max_vel_theta: 0.5
+  min_in_place_vel_theta: 0.3
+  escape_vel: -0.3
+  xy_goal_tolerance: 0.10
+  yaw_goal_tolerance: 0.25
+  path_distance_bias: 40.0
+  stop_time_buffer: 0.5
+  holonomic_robot: false
+  meter_scoring: true
+  sim_time: 2.0
+  global_frame_id: map #odom
+  controller_patience: 5.0
+  planner_frequency: 2.0
+  transform_tolerance: 1
+
+# Differential-drive robot configuration - necessary?
+#  holonomic_robot: false
+
+
+
+
 DWAPlannerROS:
 
 # Robot Configuration Parameters - Kobuki
@@ -49,7 +75,7 @@ DWAPlannerROS:
 # Debugging
   publish_traj_pc : true
   publish_cost_grid_pc: true
-  global_frame_id: odom
+  global_frame_id: map #odom
 
 
 # Differential-drive robot configuration - necessary?
