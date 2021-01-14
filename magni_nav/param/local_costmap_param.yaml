@@ -18,7 +18,7 @@ obstacle_layer:
          enabled: true
          obstacle_range: 5.0
          raytrace_range: 4.5
-         inflation_radius: 0.2
+         inflation_radius: 0.1
          track_unknown_space: true
          combination_method: 1
 
