@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="magni">
+  <xacro:arg name="robot_type" default="gen_6_mini" />
+  <xacro:include filename="$(find magni_description)/urdf/robots/$(arg robot_type).urdf.xacro" />
+  <xacro:magni />
+</robot>
