@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro">
   <xacro:macro name="magni"
-    params="sonars_installed:=true shell_installed:=false tower_installed:=false camera_extrinsics_file:='' lidar_extrinsics_file:=''">
+    params="prefix:='' sonars_installed:=true shell_installed:=false tower_installed:=false camera_extrinsics_file:='' lidar_extrinsics_file:=''">
     <xacro:property name="wheel_r" value="0.1" />
     <xacro:property name="wheel_xpos" value="0.11" />
 
@@ -13,7 +13,7 @@
 
 
     <!-- Robot base_link -->
-    <link name="base_link">
+    <link name="${prefix}base_link">
       <visual>
         <origin xyz="${-wheel_xpos} 0 ${-wheel_r+0.071}" rpy="0 0 0" />
         <geometry>
@@ -123,16 +123,16 @@
     </link>
 
     <!-- Fixed offset from the floor to the center of the wheels -->
-    <link name="base_footprint" />
-    <joint name="base_footprint_joint" type="fixed">
-      <parent link="base_footprint" />
-      <child link="base_link" />
+    <link name="${prefix}base_footprint" />
+    <joint name="${prefix}base_footprint_joint" type="fixed">
+      <parent link="${prefix}base_footprint" />
+      <child link="${prefix}base_link" />
       <origin xyz="0 0 ${wheel_r}" rpy="0 0 0" />
     </joint>
 
     <!-- Macro for defining wheels -->
-    <xacro:macro name="wheel" params="prefix reflect">
-      <link name="${prefix}_wheel">
+    <xacro:macro name="wheel" params="wheel_prefix reflect">
+      <link name="${wheel_prefix}_wheel">
         <visual>
           <origin xyz="${-0.071*reflect} 0 0" rpy="0 ${(reflect-1)*pi/2} 0" />
           <geometry>
@@ -155,21 +155,21 @@
           <origin xyz="0 0 0" rpy="0 ${pi/2} 0" />
         </xacro:cylinder_inertial_with_origin>
       </link>
-      <joint name="${prefix}_wheel_joint" type="continuous">
+      <joint name="${wheel_prefix}_wheel_joint" type="continuous">
         <axis xyz="1 0 0" rpy="0 0 0" />
-        <parent link="base_link" />
-        <child link="${prefix}_wheel" />
+        <parent link="${prefix}base_link" />
+        <child link="${wheel_prefix}_wheel" />
         <origin xyz="0 ${0.163*reflect} 0" rpy="0 0 ${pi/2}" />
       </joint>
     </xacro:macro>
 
-    <xacro:wheel prefix="left" reflect="1" />
-    <xacro:wheel prefix="right" reflect="-1" />
+    <xacro:wheel wheel_prefix="${prefix}left" reflect="1" />
+    <xacro:wheel wheel_prefix="${prefix}right" reflect="-1" />
 
 
     <!-- Macro for defining caster wheels -->
-    <xacro:macro name="caster_wheel" params="prefix reflect">
-      <link name="${prefix}_caster_wheel">
+    <xacro:macro name="caster_wheel" params="wheel_prefix reflect">
+      <link name="${wheel_prefix}_caster_wheel">
         <collision>
           <origin xyz="${-wheel_xpos-0.19} ${reflect*0.169} ${-wheel_r+0.04}" rpy="0 0 0" />
           <geometry>
@@ -177,31 +177,31 @@
           </geometry>
         </collision>
       </link>
-      <joint name="${prefix}_caster_wheel_joint" type="fixed">
-        <parent link="base_link" />
-        <child link="${prefix}_caster_wheel" />
+      <joint name="${wheel_prefix}_caster_wheel_joint" type="fixed">
+        <parent link="${prefix}base_link" />
+        <child link="${wheel_prefix}_caster_wheel" />
       </joint>
     </xacro:macro>
 
-    <xacro:caster_wheel prefix="left" reflect="1" />
-    <xacro:caster_wheel prefix="right" reflect="-1" />
+    <xacro:caster_wheel wheel_prefix="${prefix}left" reflect="1" />
+    <xacro:caster_wheel wheel_prefix="${prefix}right" reflect="-1" />
 
 
     <!-- Define all sonars, if sonars_installed set to 1 -->
     <xacro:if value="${sonars_installed}">
-      <xacro:sonar_hc-sr04 name="sonar_0" connected_to="base_link">
+      <xacro:sonar_hc-sr04 name="${prefix}sonar_0" connected_to="base_link">
         <origin xyz="0.01 -0.14 0.15" rpy="0 0 ${-pi/2}" />
       </xacro:sonar_hc-sr04>
-      <xacro:sonar_hc-sr04 name="sonar_1" connected_to="base_link">
+      <xacro:sonar_hc-sr04 name="${prefix}sonar_1" connected_to="base_link">
         <origin xyz="0.08 -0.07 0.15" rpy="0 0 0.785" />
       </xacro:sonar_hc-sr04>
-      <xacro:sonar_hc-sr04 name="sonar_2" connected_to="base_link">
+      <xacro:sonar_hc-sr04 name="${prefix}sonar_2" connected_to="base_link">
         <origin xyz="0.08 -0.01 0.15" rpy="0 0 -0.785" />
       </xacro:sonar_hc-sr04>
-      <xacro:sonar_hc-sr04 name="sonar_3" connected_to="base_link">
+      <xacro:sonar_hc-sr04 name="${prefix}sonar_3" connected_to="base_link">
         <origin xyz="0.08 0.04 0.15" rpy="0 0 0" />
       </xacro:sonar_hc-sr04>
-      <xacro:sonar_hc-sr04 name="sonar_4" connected_to="base_link">
+      <xacro:sonar_hc-sr04 name="${prefix}sonar_4" connected_to="base_link">
         <origin xyz="0.01 0.14 0.15" rpy="0 0 ${pi/2}" />
       </xacro:sonar_hc-sr04>
     </xacro:if>
@@ -209,7 +209,7 @@
     <!-- Define camera -->
     <xacro:if value="${camera_extrinsics_file != ''}">
       <xacro:property name="cam_extrinsics" value="${xacro.load_yaml(camera_extrinsics_file)}" />
-      <xacro:raspi_camera name="raspicam" connected_to="base_link">
+      <xacro:raspi_camera name="${prefix}raspicam" connected_to="${prefix}base_link">
         <origin xyz="${cam_extrinsics['x']} ${cam_extrinsics['y']} ${cam_extrinsics['z']}"
           rpy="${cam_extrinsics['roll']} ${cam_extrinsics['pitch']} ${cam_extrinsics['yaw']}" />
       </xacro:raspi_camera>
@@ -218,7 +218,7 @@
     <!-- Define Lidar -->
     <xacro:if value="${lidar_extrinsics_file != ''}">
       <xacro:property name="lidar_extrinsics" value="${xacro.load_yaml(lidar_extrinsics_file)}" />
-      <xacro:ur_c1_lidar name="laser" connected_to="base_link">
+      <xacro:ur_c1_lidar name="${prefix}laser" connected_to="${prefix}base_link">
         <origin xyz="${lidar_extrinsics['x']} ${lidar_extrinsics['y']} ${lidar_extrinsics['z']}"
           rpy="${lidar_extrinsics['roll']} ${lidar_extrinsics['pitch']} ${lidar_extrinsics['yaw']}" />
       </xacro:ur_c1_lidar>
@@ -230,14 +230,14 @@
         <plugin>ubiquity_motor_ros2/MotorHardware</plugin>
       </hardware>
 
-      <joint name="left_wheel_joint">
+      <joint name="${prefix}left_wheel_joint">
         <command_interface name="velocity" />
         <state_interface name="position" />
         <state_interface name="velocity" />
         <state_interface name="effort" />
       </joint>
 
-      <joint name="right_wheel_joint">
+      <joint name="${prefix}right_wheel_joint">
         <command_interface name="velocity" />
         <state_interface name="position" />
         <state_interface name="velocity" />
